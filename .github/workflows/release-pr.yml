@@ -1,0 +1,89 @@
+name: release-pr
+
+on:
+  workflow_call:
+    inputs:
+      git_pr_release_branch_staging:
+        type: string
+        description: 'The branch name that the feature branches are merged into and is going to be merged into the "production" branch.'
+        default: 'release'
+        required: false
+      git_pr_release_branch_production:
+        type: string
+        description: 'The branch name that is deployed in production environment.'
+        default: 'main'
+        required: false
+      git_pr_release_template:
+        type: string
+        description: 'The template file path (relative to the workidir top) for pull requests created. Its first line is used for the PR title, the rest for the body. This is an ERB template.'
+        default: '.git-pr-release-template'
+        required: false
+      override:
+        type: boolean
+        description: 'If this value is true, this action overrides an existing branch and a pull request.'
+        default: false
+        required: false
+    secrets:
+      token:
+        required: true
+      slack_webhook:
+        required: true
+
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.token }}
+      GIT_PR_RELEASE_TOKEN: ${{ secrets.token }}
+      GIT_PR_RELEASE_BRANCH_STAGING: ${{ inputs.git_pr_release_branch_staging }}
+      GIT_PR_RELEASE_BRANCH_PRODUCTION: ${{ inputs.git_pr_release_branch_production }}
+      GIT_PR_RELEASE_TEMPLATE: ${{ inputs.git_pr_release_template }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # Need to fetch merge history
+          ref: ${{ github.event.inputs.branch_name }} # checkout branch
+
+      - name: Check if release branch exists
+        if: ${{ inputs.override }}
+        run: |
+          ! (git branch -a | grep -c "remotes/origin/$GIT_PR_RELEASE_BRANCH_STAGING")
+
+      - name: Create new Branch
+        run: |
+          git switch -c $GIT_PR_RELEASE_BRANCH_STAGING
+          git push origin $GIT_PR_RELEASE_BRANCH_STAGING
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.0.3
+          bundler-cache: true
+
+      - name: Create a release pull request
+        run: |
+          gem install -N git-pr-release
+          git-pr-release
+
+      - name: Fetch created pull request info
+        id: fetch
+        run: |
+          gh pr view $GIT_PR_RELEASE_BRANCH_STAGING --json "body,number" -t '{{ .number }}{{ printf "\n" }}{{ .body }}' > pr.txt
+          users=$(grep -o -E '@[A-z]+' pr.txt | uniq | xargs echo)
+          number=$(head -n 1 pr.txt)
+          echo ::set-output name=users::$users
+          echo ::set-output name=number::$number
+
+      - name: Notify of Slack
+        uses: rtCamp/action-slack-notify@v2
+        if: ${{ secrets.slack_webhook }}
+        env:
+          SLACK_WEBHOOK: ${{ secrets.slack_webhook }}
+          SLACK_COLOR: '#1DD0B0'
+          SLACK_TITLE: '${{ github.repository }} has changes to be released!'
+          SLACK_MESSAGE: 'Check https://github.com/${{ github.repository }}/pulls/${{ steps.fetch.outputs.number }} ${{ steps.fetch.outputs.users }} '
+          SLACK_FOOTER: ''
+          SLACK_LINK_NAMES: true
+          MSG_MINIMAL: true
+
