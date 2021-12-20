@@ -2,7 +2,7 @@
 
 This is a [reusable GitHub Actions workflow](https://docs.github.com/en/actions/learn-github-actions/reusing-workflows) that creates a pull request with [git-pr-release](https://github.com/x-motemen/git-pr-release).
 
-Once this workflow creates a pull request, it notifies of you on Slack.
+Once this workflow creates a pull request, it notifies you on Slack.
 
 ## Usage
 
@@ -75,5 +75,5 @@ jobs:
 | Name      | Required | Default               | Description                                      |
 |-----------|----------|-----------------------|--------------------------------------------------|
 | token | `true`   | - | GitHub token to be used for all git operations. |
-| slack_webhook | `true`   | - | Specify Slack channel in which message needs to be sent. |
+| slack_webhook | `true`   | - | Slack Webhook URL. The URL is associated with a channel to be notified. |
 
