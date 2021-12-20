@@ -81,7 +81,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.slack_webhook }}
           SLACK_COLOR: '#1DD0B0'
           SLACK_TITLE: '${{ github.repository }} has changes to be released!'
-          SLACK_MESSAGE: 'Check https://github.com/${{ github.repository }}/pulls/${{ steps.fetch.outputs.number }} ${{ steps.fetch.outputs.users }} '
+          SLACK_MESSAGE: 'Check https://github.com/${{ github.repository }}/pull/${{ steps.fetch.outputs.number }} ${{ steps.fetch.outputs.users }} '
           SLACK_FOOTER: ''
           SLACK_LINK_NAMES: true
           MSG_MINIMAL: true
