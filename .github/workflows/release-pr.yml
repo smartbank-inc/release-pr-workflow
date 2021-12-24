@@ -6,21 +6,21 @@ on:
       git_pr_release_branch_staging:
         type: string
         description: 'The branch name that the feature branches are merged into and is going to be merged into the "production" branch.'
-        default: 'release'
+        default: "release"
         required: false
       git_pr_release_branch_production:
         type: string
-        description: 'The branch name that is deployed in production environment.'
-        default: 'main'
+        description: "The branch name that is deployed in production environment."
+        default: "main"
         required: false
       git_pr_release_template:
         type: string
-        description: 'The template file path (relative to the workidir top) for pull requests created. Its first line is used for the PR title, the rest for the body. This is an ERB template.'
-        default: '.git-pr-release-template'
+        description: "The template file path (relative to the workidir top) for pull requests created. Its first line is used for the PR title, the rest for the body. This is an ERB template."
+        default: ".git-pr-release-template"
         required: false
       override:
         type: boolean
-        description: 'If this value is true, this action overrides an existing branch and a pull request.'
+        description: "If this value is true, this action overrides an existing branch and a pull request."
         default: false
         required: false
     secrets:
@@ -46,7 +46,7 @@ jobs:
           ref: ${{ github.event.inputs.branch_name }} # checkout branch
 
       - name: Check if release branch exists
-        if: ${{ inputs.override }}
+        if: ${{ !inputs.override }}
         run: |
           ! (git branch -a | grep -c "remotes/origin/$GIT_PR_RELEASE_BRANCH_STAGING")
 
@@ -79,9 +79,9 @@ jobs:
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.slack_webhook }}
-          SLACK_COLOR: '#1DD0B0'
-          SLACK_TITLE: '${{ github.repository }} has changes to be released!'
-          SLACK_MESSAGE: 'Check https://github.com/${{ github.repository }}/pull/${{ steps.fetch.outputs.number }} ${{ steps.fetch.outputs.users }} '
-          SLACK_FOOTER: ''
+          SLACK_COLOR: "#1DD0B0"
+          SLACK_TITLE: "${{ github.repository }} has changes to be released!"
+          SLACK_MESSAGE: "Check https://github.com/${{ github.repository }}/pull/${{ steps.fetch.outputs.number }} ${{ steps.fetch.outputs.users }} "
+          SLACK_FOOTER: ""
           SLACK_LINK_NAMES: true
           MSG_MINIMAL: true
