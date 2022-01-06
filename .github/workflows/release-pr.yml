@@ -47,7 +47,7 @@ jobs:
 
       - name: Check if release target exists by comparing the production branch and the default branch
         run: |
-          git log --merges refs/remotes/origin/$GIT_PR_RELEASE_BRANCH_PRODUCTION..$(git symbolic-ref refs/remotes/origin/HEAD) --pretty=format:%h > commits.txt
+          git log --merges origin/$GIT_PR_RELEASE_BRANCH_PRODUCTION..origin/$(git branch --show-current) --pretty=format:%h > commits.txt
           test -s commits.txt # if file is not empty, it goes to the next step
 
       - name: Check if release branch exists
