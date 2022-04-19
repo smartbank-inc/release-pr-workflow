@@ -61,9 +61,9 @@ jobs:
           git push origin $GIT_PR_RELEASE_BRANCH_STAGING
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v2
         with:
-          ruby-version: 3.0.3
+          ruby-version: 3.0.4
           bundler-cache: true
 
       - name: Create a release pull request
