@@ -53,7 +53,7 @@ jobs:
       - name: Check if release branch exists
         if: ${{ !inputs.override }}
         run: |
-          ! (git branch -a | grep -c "remotes/origin/$GIT_PR_RELEASE_BRANCH_STAGING")
+          ! (git branch -a --format="%(refname:short)" | grep -cx "origin/$GIT_PR_RELEASE_BRANCH_STAGING")
 
       - name: Create new Branch
         run: |
