@@ -64,9 +64,9 @@ jobs:
         id: ruby-version-check
         run: |
           if [ -e ".ruby-version" ]; then
-            echo ::set-output name=version::.ruby-version
+            echo "version=.ruby-version" >> "${GITHUB_OUTPUT}"
           else
-            echo ::set-output name=version::3.1.2
+            echo "version=3.1.2" >> "${GITHUB_OUTPUT}"
           fi
 
       - name: Set up Ruby
@@ -86,8 +86,8 @@ jobs:
           gh pr view $GIT_PR_RELEASE_BRANCH_STAGING --json "body,number" -t '{{ .number }}{{ printf "\n" }}{{ .body }}' > pr.txt
           users=$(grep -o -E '@[A-z]+' pr.txt | sort -u | xargs echo)
           number=$(head -n 1 pr.txt)
-          echo ::set-output name=users::$users
-          echo ::set-output name=number::$number
+          echo "users=${users}" >> "${GITHUB_OUTPUT}"
+          echo "number=${number}" >> "${GITHUB_OUTPUT}"
 
       - name: Notify of Slack
         uses: rtCamp/action-slack-notify@v2
