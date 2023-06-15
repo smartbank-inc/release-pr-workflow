@@ -40,7 +40,7 @@ jobs:
       GIT_PR_RELEASE_TEMPLATE: ${{ inputs.git_pr_release_template }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0 # Need to fetch merge history
           ref: ${{ github.event.inputs.branch_name }} # checkout branch
