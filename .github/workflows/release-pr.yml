@@ -84,7 +84,7 @@ jobs:
         id: fetch
         run: |
           gh pr view $GIT_PR_RELEASE_BRANCH_STAGING --json "body,number" -t '{{ .number }}{{ printf "\n" }}{{ .body }}' > pr.txt
-          users=$(grep -o -E "^@[a-zA-Z0-9]([a-zA-Z0-9]?|[\-]?([a-zA-Z0-9])){0,38}$" pr.txt | sort -u | xargs echo)
+          users=$(grep -o -E "@[a-zA-Z0-9]([a-zA-Z0-9]?|[\-]?([a-zA-Z0-9])){0,38}" pr.txt | sort -u | xargs echo)
           number=$(head -n 1 pr.txt)
           echo "users=${users}" >> $GITHUB_OUTPUT
           echo "number=${number}" >> $GITHUB_OUTPUT
