@@ -40,7 +40,7 @@ jobs:
       GIT_PR_RELEASE_TEMPLATE: ${{ inputs.git_pr_release_template }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
         with:
           fetch-depth: 0 # Need to fetch merge history
           ref: ${{ github.event.inputs.branch_name }} # checkout branch
@@ -70,7 +70,7 @@ jobs:
           fi
 
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@1a615958ad9d422dd932dc1d5823942ee002799f # v1.227.0
         with:
           ruby-version: ${{ steps.ruby-version-check.outputs.version }}
           bundler-cache: true
@@ -90,7 +90,7 @@ jobs:
           echo "number=${number}" >> $GITHUB_OUTPUT
 
       - name: Notify of Slack
-        uses: rtCamp/action-slack-notify@v2
+        uses: rtCamp/action-slack-notify@c33737706dea87cd7784c687dadc9adf1be59990 # v2.3.2
         env:
           SLACK_WEBHOOK: ${{ secrets.slack_webhook }}
           SLACK_COLOR: "#1DD0B0"
