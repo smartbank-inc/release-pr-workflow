@@ -51,9 +51,31 @@ jobs:
           test -s commits.txt # if file is not empty, it goes to the next step
 
       - name: Check if release branch exists
+        id: branch-check
         if: ${{ !inputs.override }}
         run: |
-          ! (git branch -a --format="%(refname:short)" | grep -cx "origin/$GIT_PR_RELEASE_BRANCH_STAGING")
+          if git branch -a --format="%(refname:short)" | grep -qx "origin/$GIT_PR_RELEASE_BRANCH_STAGING"; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notify if branch already exists
+        if: ${{ !inputs.override && steps.branch-check.outputs.exists == 'true' }}
+        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661 # v2.3.3
+        env:
+          SLACK_WEBHOOK: ${{ secrets.slack_webhook }}
+          SLACK_COLOR: "warning"
+          SLACK_TITLE: "${{ github.repository }} - Release branch already exists"
+          SLACK_MESSAGE: "The release branch '${{ inputs.git_pr_release_branch_staging }}' already exists. Please merge or delete the existing branch before creating a new one."
+          SLACK_FOOTER: ""
+          MSG_MINIMAL: true
+
+      - name: Exit if branch already exists
+        if: ${{ !inputs.override && steps.branch-check.outputs.exists == 'true' }}
+        run: |
+          echo "Error: Release branch already exists. Exiting."
+          exit 1
 
       - name: Create new Branch
         run: |
