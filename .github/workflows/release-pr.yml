@@ -62,14 +62,18 @@ jobs:
 
       - name: Notify if branch already exists
         if: ${{ !inputs.override && steps.branch-check.outputs.exists == 'true' }}
-        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661 # v2.3.3
-        env:
-          SLACK_WEBHOOK: ${{ secrets.slack_webhook }}
-          SLACK_COLOR: "warning"
-          SLACK_TITLE: "${{ github.repository }} - Release branch already exists"
-          SLACK_MESSAGE: "The release branch '${{ inputs.git_pr_release_branch_staging }}' already exists. Please merge or delete the existing branch before creating a new one."
-          SLACK_FOOTER: ""
-          MSG_MINIMAL: true
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+        with:
+          webhook: ${{ secrets.slack_webhook }}
+          webhook-type: incoming-webhook
+          payload: |
+            attachments:
+              - color: "warning"
+                blocks:
+                  - type: "section"
+                    text:
+                      type: "mrkdwn"
+                      text: "*${{ github.repository }} - Release branch already exists*\nThe release branch '${{ inputs.git_pr_release_branch_staging }}' already exists. Please merge or delete the existing branch before creating a new one."
 
       - name: Exit if branch already exists
         if: ${{ !inputs.override && steps.branch-check.outputs.exists == 'true' }}
@@ -112,12 +116,15 @@ jobs:
           echo "number=${number}" >> $GITHUB_OUTPUT
 
       - name: Notify of Slack
-        uses: rtCamp/action-slack-notify@e31e87e03dd19038e411e38ae27cbad084a90661 # v2.3.3
-        env:
-          SLACK_WEBHOOK: ${{ secrets.slack_webhook }}
-          SLACK_COLOR: "#1DD0B0"
-          SLACK_TITLE: "${{ github.repository }} has changes to be released!"
-          SLACK_MESSAGE: "Check https://github.com/${{ github.repository }}/pull/${{ steps.fetch.outputs.number }} ${{ steps.fetch.outputs.users }} "
-          SLACK_FOOTER: ""
-          SLACK_LINK_NAMES: true
-          MSG_MINIMAL: true
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
+        with:
+          webhook: ${{ secrets.slack_webhook }}
+          webhook-type: incoming-webhook
+          payload: |
+            attachments:
+              - color: "#1DD0B0"
+                blocks:
+                  - type: "section"
+                    text:
+                      type: "mrkdwn"
+                      text: "*${{ github.repository }} has changes to be released!*\nCheck <https://github.com/${{ github.repository }}/pull/${{ steps.fetch.outputs.number }}|PR #${{ steps.fetch.outputs.number }}> ${{ steps.fetch.outputs.users }}"
