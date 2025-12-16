@@ -23,6 +23,11 @@ on:
         description: "The labels list for adding to pull requests created. This value should be comma-separated strings."
         default: ""
         required: false
+      git_pr_release_assign_pr_author:
+        type: boolean
+        description: "Whether to assign the related users of the merged pull requests to the release pull request."
+        default: false
+        required: false
       override:
         type: boolean
         description: "If this value is true, this action overrides an existing branch and a pull request."
@@ -44,6 +49,7 @@ jobs:
       GIT_PR_RELEASE_BRANCH_PRODUCTION: ${{ inputs.git_pr_release_branch_production }}
       GIT_PR_RELEASE_TEMPLATE: ${{ inputs.git_pr_release_template }}
       GIT_PR_RELEASE_LABELS: ${{ inputs.git_pr_release_labels }}
+      GIT_PR_RELEASE_ASSIGN_PR_AUTHOR: ${{ inputs.git_pr_release_assign_pr_author }}
     steps:
       - name: Checkout
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
