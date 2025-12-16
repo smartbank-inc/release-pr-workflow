@@ -18,6 +18,21 @@ on:
         description: "The template file path (relative to the workidir top) for pull requests created. Its first line is used for the PR title, the rest for the body. This is an ERB template."
         default: ".git-pr-release-template"
         required: false
+      git_pr_release_labels:
+        type: string
+        description: "The labels list for adding to pull requests created. This value should be comma-separated strings."
+        default: ""
+        required: false
+      git_pr_release_assign_pr_author:
+        type: boolean
+        description: "Whether to assign the related users of the merged pull requests to the release pull request."
+        default: false
+        required: false
+      git_pr_release_request_pr_author_review:
+        type: boolean
+        description: "Whether to request review from the related users of the merged pull requests on the release pull request."
+        default: false
+        required: false
       override:
         type: boolean
         description: "If this value is true, this action overrides an existing branch and a pull request."
@@ -38,6 +53,9 @@ jobs:
       GIT_PR_RELEASE_BRANCH_STAGING: ${{ inputs.git_pr_release_branch_staging }}
       GIT_PR_RELEASE_BRANCH_PRODUCTION: ${{ inputs.git_pr_release_branch_production }}
       GIT_PR_RELEASE_TEMPLATE: ${{ inputs.git_pr_release_template }}
+      GIT_PR_RELEASE_LABELS: ${{ inputs.git_pr_release_labels }}
+      GIT_PR_RELEASE_ASSIGN_PR_AUTHOR: ${{ inputs.git_pr_release_assign_pr_author }}
+      GIT_PR_RELEASE_REQUEST_PR_AUTHOR_REVIEW: ${{ inputs.git_pr_release_request_pr_author_review }}
     steps:
       - name: Checkout
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
