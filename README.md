@@ -70,6 +70,7 @@ jobs:
 | git_pr_release_template | `false`   | `.git-pr-release-template` | The template file path (relative to the workidir top) for pull requests created. Its first line is used for the PR title, the rest for the body. This is an ERB template. |
 | git_pr_release_labels | `false`   | empty string | The labels list for adding to pull requests created. This value should be comma-separated strings. |
 | git_pr_release_assign_pr_author | `false`   | `false` | Whether to assign the related users of the merged pull requests to the release pull request. |
+| git_pr_release_request_pr_author_review | `false`   | `false` | Whether to request review from the related users of the merged pull requests on the release pull request. |
 | override | `false`   | `false` | If this value is true, this workflow overrides an existing branch and a pull request. If its' false, this workflow checks branch existence (If exists, stop to create a branch). |
 
 ### Secrets
