@@ -68,6 +68,7 @@ jobs:
 | git_pr_release_branch_staging | `false`   | `release` | The branch name that the feature branches are merged into and is going to be merged into the "production" branch. |
 | git_pr_release_branch_production | `false`   | `main` | The branch name that is deployed in production environment. |
 | git_pr_release_template | `false`   | `.git-pr-release-template` | The template file path (relative to the workidir top) for pull requests created. Its first line is used for the PR title, the rest for the body. This is an ERB template. |
+| git_pr_release_labels | `false`   | empty string | The labels list for adding to pull requests created. This value should be comma-separated strings. |
 | override | `false`   | `false` | If this value is true, this workflow overrides an existing branch and a pull request. If its' false, this workflow checks branch existence (If exists, stop to create a branch). |
 
 ### Secrets
