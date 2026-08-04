@@ -80,7 +80,7 @@ jobs:
 
       - name: Notify if branch already exists
         if: ${{ !inputs.override && github.event_name != 'schedule' && steps.branch-check.outputs.exists == 'true' }}
-        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           webhook: ${{ secrets.slack_webhook }}
           webhook-type: incoming-webhook
@@ -134,7 +134,7 @@ jobs:
           echo "number=${number}" >> $GITHUB_OUTPUT
 
       - name: Notify of Slack
-        uses: slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c # v3.0.3
+        uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
         with:
           webhook: ${{ secrets.slack_webhook }}
           webhook-type: incoming-webhook
