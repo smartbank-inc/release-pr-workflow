@@ -110,7 +110,7 @@ jobs:
           if [ -e ".ruby-version" ]; then
             echo "version=.ruby-version" >> $GITHUB_OUTPUT
           else
-            echo "version=3.1.2" >> $GITHUB_OUTPUT
+            echo "version=3.3" >> $GITHUB_OUTPUT
           fi
 
       - name: Set up Ruby
